@@ -7,6 +7,9 @@
     <title>Document</title>
 </head>
 <body>
-    <p></p>
+
+    <p>{{Auth::user()->id}}</p>
+
+    
 </body>
 </html>
