@@ -11,6 +11,9 @@
 |
 */
 
+use App\Post;
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,6 +36,19 @@ Route::get('/newPost', function(){
 
     return view("new_post", ["posts"=>$posts]);
 })->middleware('auth');
+
+Route::post('/newPost', function (Request $request) {
+    // $validator = Validator::make($request::all(), [
+    //     'postText' => 'required|max:255',
+    // ]);
+
+    $post = new Post();
+    $post->text = $request->postText;
+    $post->user_id = $request->postId;
+    $post->image = "djahdi";
+    $post->save();
+
+});
 
 
 Auth::routes();
