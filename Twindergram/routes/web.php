@@ -12,6 +12,7 @@
 */
 
 use App\Post;
+use App\Comment;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -38,17 +39,40 @@ Route::get('/newPost', function(){
 })->middleware('auth');
 
 Route::post('/newPost', function (Request $request) {
-    // $validator = Validator::make($request::all(), [
-    //     'postText' => 'required|max:255',
-    // ]);
+    $validator = Validator::make($request::all(), [
+        'postText' => 'required|max:255',
+    ]);
 
     $post = new Post();
     $post->text = $request->postText;
-    $post->user_id = $request->postId;
+    $post->user_id = $request->userId;
     $post->image = "djahdi";
     $post->save();
+});
+
+Route::post('/newComment/{postId}', function ($postId, Request $request) {
+    
+    $comment = new Comment();
+    $comment->text = $request->commentText;
+    $comment->post_id = $postId;
+    $comment->user_id = $request->userId;
+    $comment->image = "djahdi";
+    $comment->save();
+
+    return redirect()->route('post', $postId);
 
 });
+
+Route::get('/allPosts', function(){
+    $posts = App\Post::all()->sortBy("created_at");
+
+    return view("all_posts", ["posts"=>$posts]);
+})->middleware('auth');
+
+Route::get('/post/{postId}', function($postId){
+    $post = App\Post::find($postId);
+    return view("post", ["post"=>$post]);
+})->middleware('auth')->name('post');
 
 
 Auth::routes();

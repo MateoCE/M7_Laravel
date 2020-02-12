@@ -9,37 +9,48 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-    <title>Document</title>
+    <title>Posts</title>
 </head>
 <body>
-
     
-    <div class="border border-dark mt-3 col-5 mx-auto">
+    <div class="border border-primary mt-3 col-5 mx-auto" >
 
-        <form action="{{ url('newPost')}}" method="POST" class="form-horizontal">
+        <h4>{{$post->user->name}}</h4>
+        <p><small>{{$post->created_at}}</small></p>
+        <p>{{$post->text}}</p>
+
+    </div>
+
+    <div class="border border-dark mt-3 col-5 mx-auto" >
+        <form action="{{ url('newComment/'.$post->id)}}" method="POST" class="form-horizontal">
         {{ csrf_field() }}
-
-        <!-- Task Name -->
             <div class="form-group">
-                <h4 class="mt-2">New Post</h4>
+                <h5 class="mt-1">New comment</h5>
 
-                <div class="col-sm-6">
-                    <input type="text" name="postText" id="Post-text" class="form-control" value="">
+                <div >
+                    <input type="text" name="commentText" id="Comment-text" class="form-control" value="">
                     <input type="hidden" name="userId" value="{{Auth::user()->id}}">
                 </div>
             </div>
 
-            <!-- Add Task Button -->
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-btn fa-plus"></i>Add Post
+                        <i class="fa fa-btn fa-plus"></i>Add Comment
                     </button>
                 </div>
             </div>
+
         </form>
+    </div>
+    @foreach($post->comments as $comment)
+    <div class="border border-warning mt-3 col-5 mx-auto" >
+
+        <h4>{{$comment->user->name}}</h4>
+        <p><small>{{$comment->created_at}}</small></p>
+        <p>{{$comment->text}}</p>
 
     </div>
+    @endforeach
 </body>
 </html>
